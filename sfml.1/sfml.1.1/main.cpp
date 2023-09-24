@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <string>
 
 void drawCircle(float x, float y, std::string color, sf::RenderWindow &window)
 {
@@ -19,7 +18,7 @@ void drawCircle(float x, float y, std::string color, sf::RenderWindow &window)
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({300, 700}), "Rectangles and Circle");
+    sf::RenderWindow window(sf::VideoMode({300, 700}), "Traffic Light");
 
     window.clear();
 

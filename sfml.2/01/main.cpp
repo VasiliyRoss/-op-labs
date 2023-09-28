@@ -9,7 +9,7 @@ int main()
     constexpr float BALL_SIZE = 40;
     sf::Vector2f speed = {50.f, 15.f};
 
-    sf::RenderWindow window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "Simple event loop");
+    sf::RenderWindow window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "Mooving Ball");
     sf::Clock clock;
 
     sf::CircleShape shape(BALL_SIZE);

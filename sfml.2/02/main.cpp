@@ -2,6 +2,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <cmath>
+#include <iostream>
 
 constexpr unsigned WINDOW_WIDTH = 800;
 constexpr unsigned WINDOW_HEIGHT = 600;
@@ -9,13 +10,13 @@ constexpr unsigned WINDOW_HEIGHT = 600;
 int main()
 {
     constexpr float BALL_SIZE = 40;
-
+    float posX = 0;
+    float speedX = 100.f;
+    sf::Clock clock, clockX;
     sf::RenderWindow window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "Wave Moving Ball");
-    sf::Clock clock;
-
-    sf::Vector2f position = {10, 350};
-
+    sf::Vector2f position = {0, 350};
     sf::CircleShape ball(BALL_SIZE);
+
     ball.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
 
     while (window.isOpen())
@@ -29,15 +30,24 @@ int main()
             }
         }
 
-        constexpr float speedX = 100.f;
         constexpr float amplitudeY = 80.f;
         constexpr float periodY = 2;
-
         const float time = clock.getElapsedTime().asSeconds();
         const float wavePhase = time * float(2 * M_PI);
-        const float x = speedX * time;
-        const float y = amplitudeY * std::sin(wavePhase / periodY);
-        const sf::Vector2f offset = {x, y};
+        const float posY = amplitudeY * std::sin(wavePhase / periodY);
+        const float timeX = clockX.restart().asSeconds();
+
+        if ((posX + 2 * BALL_SIZE >= WINDOW_WIDTH) && (speedX > 0))
+        {
+            speedX = -speedX;
+        }
+        if ((posX < 0) && (speedX < 0))
+        {
+            speedX = -speedX;
+        }
+
+        posX += speedX * timeX;
+        const sf::Vector2f offset = {posX, posY};
 
         ball.setPosition(position + offset);
 

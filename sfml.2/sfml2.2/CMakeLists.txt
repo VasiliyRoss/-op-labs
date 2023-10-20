@@ -1,6 +1,7 @@
 add_executable(sfml2.2 main.cpp)
 
-set(SFML_STATIC_LIBRARIES TRUE)
+#set(SFML_STATIC_LIBRARIES TRUE)
+set(SFML_DIR "/usr/local/lib/cmake/SFML")
 
 find_package(Freetype REQUIRED)
 find_package(JPEG REQUIRED)
@@ -10,4 +11,4 @@ target_include_directories(sfml2.2 PRIVATE ${SFML_INCLUDE_DIR})
 target_compile_features(sfml2.2 PUBLIC cxx_std_17)
 target_compile_definitions(sfml2.2 PRIVATE SFML_STATIC)
 
-target_link_libraries(sfml2.2 ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+target_link_libraries(sfml2.2 sfml-graphics sfml-window sfml-system)

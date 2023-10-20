@@ -4,7 +4,7 @@
 
 int main()
 {
-  sf::RenderWindow window(sf::VideoMode({800, 600}), "title");
+  sf::RenderWindow window(sf::VideoMode({800, 600}), "Shapes");
 
   window.clear();
 

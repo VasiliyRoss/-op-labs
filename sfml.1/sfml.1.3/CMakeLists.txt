@@ -1,6 +1,7 @@
 add_executable(house main.cpp)
 
-set(SFML_STATIC_LIBRARIES TRUE)
+#set(SFML_STATIC_LIBRARIES TRUE)
+set(SFML_DIR "/usr/local/lib/cmake/SFML")
 
 find_package(Freetype)
 find_package(JPEG)

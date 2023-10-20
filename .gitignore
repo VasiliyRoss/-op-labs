@@ -29,7 +29,7 @@
 *.exe
 *.out
 *.app
-.vscode
+
 
 **/cmake-build-debug
 **/CMakeCache.txt
@@ -55,3 +55,4 @@ include/*
 lib/*
 bin/*
 test/test_runner
+.vscode/*

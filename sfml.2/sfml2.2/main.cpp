@@ -7,6 +7,10 @@ constexpr unsigned WINDOW_HEIGHT = 600;
 
 int main()
 {
+    float speed = 100.f;
+
+    sf::Clock clock;
+
     constexpr int pointCount = 200;
 
     sf::ContextSettings settings;
@@ -16,8 +20,6 @@ int main()
         sf::Style::Default, settings);
     sf::ConvexShape ellipse;
     ellipse.setFillColor(sf::Color(0xFF, 0x09, 0x80));
-
-    ellipse.setPosition({400, 320});
 
     ellipse.setPointCount(pointCount);
     for (int pointNo = 0; pointNo < pointCount; ++pointNo)
@@ -30,6 +32,7 @@ int main()
         ellipse.setPoint(pointNo, point);
     }
 
+    int i = 0;
     while (window.isOpen())
     {
         sf::Event event;
@@ -40,6 +43,18 @@ int main()
                 window.close();
             }
         }
+
+        const float time = clock.getElapsedTime().asSeconds();
+        const float centerX = 400;
+        const float centerY = 320;
+        const float orbiteRadius = 60;
+
+        const float offsetX = centerX + (orbiteRadius * std::cos(time * speed * M_PI / 180));
+        const float offsetY = centerY + (orbiteRadius * std::sin(time * speed * M_PI / 180));
+        const sf::Vector2f offset = {offsetX, offsetY};
+
+        ellipse.setPosition(offset);
+
         window.clear();
         window.draw(ellipse);
         window.display();

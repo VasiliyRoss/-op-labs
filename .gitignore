@@ -29,6 +29,7 @@
 *.exe
 *.out
 *.app
+.vscode
 
 **/cmake-build-debug
 **/CMakeCache.txt

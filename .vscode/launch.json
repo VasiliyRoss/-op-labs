@@ -5,7 +5,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/sfml.3/00/00.exe",
+            "program": "${workspaceRoot}/sfml.3/00/00",
             "args": [],
             "preLaunchTask": "build all",
             "stopAtEntry": false,
@@ -13,7 +13,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "gdb.exe",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

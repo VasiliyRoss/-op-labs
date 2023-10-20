@@ -4,7 +4,7 @@ set(SFML_STATIC_LIBRARIES TRUE)
 
 find_package(Freetype)
 find_package(JPEG)
-find_package(SFML 2 COMPONENTS window graphics system)
+find_package(SFML 3 COMPONENTS Window Graphics System)
 
 target_compile_features(02 PUBLIC cxx_std_17)
 target_compile_definitions(02 PRIVATE SFML_STATIC)

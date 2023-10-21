@@ -5,7 +5,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/sfml.3/01/01",
+            "program": "${workspaceRoot}/sfml.3/sfml3.1/sfml3.1",
             "args": [],
             "preLaunchTask": "build all",
             "stopAtEntry": false,

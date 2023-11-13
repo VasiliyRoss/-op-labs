@@ -1,26 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
-
-struct Pupil
-{
-    sf::CircleShape head;
-    sf::RectangleShape stem;
-    sf::Vector2f position;
-    float rotation = 0;
-};
+#include <iostream>
 
 struct Eye
 {
     sf::ConvexShape eyeball;
-    Pupil pupil;
+    sf::CircleShape pupil;
     sf::Vector2f position;
 };
 
 void initEye(Eye &eye, sf::Vector2f &position);
-void initPupil(Pupil &pupil, sf::Vector2f &position);
 sf::Vector2f toEuclidean(float radius, float angle);
 float toDegrees(float radians);
-void updatePupil(Pupil &pupil);
 void onMouseMove(const sf::Event::MouseMoveEvent &event, sf::Vector2f &mousePosition);
 void pollEvents(sf::RenderWindow &window, sf::Vector2f &mousePosition);
 void update(const sf::Vector2f &mousePosition, Eye &eye);
@@ -60,10 +51,10 @@ int main()
 void initEye(Eye &eye, sf::Vector2f &position)
 {
     constexpr int pointCount = 200;
+    eye.position = position;
     const sf::Vector2f eyeRadius = {40.f, 80.f};
     eye.eyeball.setPosition(position);
     eye.eyeball.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
-
     eye.eyeball.setPointCount(pointCount);
     for (int pointNo = 0; pointNo < pointCount; ++pointNo)
     {
@@ -74,24 +65,9 @@ void initEye(Eye &eye, sf::Vector2f &position)
         eye.eyeball.setPoint(pointNo, point);
     }
 
-    sf::Vector2f pupilPosition = {200, 300};
-    initPupil(eye.pupil, position);
-}
-
-// Инициализирует фигуру-стрелку
-void initPupil(Pupil &pupil, sf::Vector2f &position)
-{
-    pupil.position = position;
-
-    pupil.head.setRadius(10);
-    pupil.head.setFillColor(sf::Color(0x0, 0x0, 0x0));
-    pupil.head.setOrigin({0, 10});
-
-    pupil.stem.setSize({80, 20});
-    pupil.stem.setOrigin({40, 10});
-    pupil.stem.setFillColor(sf::Color(0x0, 0x0, 0x0));
-
-    updatePupil(pupil);
+    eye.pupil.setRadius(10);
+    eye.pupil.setFillColor(sf::Color(0xFF, 0x0, 0x0));
+    eye.pupil.setPosition(position);
 }
 
 // Переводит полярные координаты в декартовы
@@ -105,19 +81,6 @@ sf::Vector2f toEuclidean(float radius, float angle)
 float toDegrees(float radians)
 {
     return float(double(radians) * 180 / M_PI);
-}
-
-// Обновляет позиции и повороты частей стрелки согласно текущему
-// состоянию стрелки
-void updatePupil(Pupil &pupil)
-{
-    const sf::Vector2f headOffset = toEuclidean(15, pupil.rotation);
-    pupil.head.setPosition(pupil.position + headOffset);
-    pupil.head.setRotation(toDegrees(pupil.rotation));
-
-    const sf::Vector2f stemOffset = toEuclidean(-10, pupil.rotation);
-    pupil.stem.setPosition(pupil.position);
-    pupil.stem.setRotation(toDegrees(pupil.rotation));
 }
 
 void onMouseMove(const sf::Event::MouseMoveEvent &event, sf::Vector2f &mousePosition)
@@ -149,19 +112,26 @@ void pollEvents(sf::RenderWindow &window, sf::Vector2f &mousePosition)
 // Обновляет фигуру, указывающую на мышь
 void update(const sf::Vector2f &mousePosition, Eye &eye)
 {
-    const sf::Vector2f delta = mousePosition - eye.pupil.position;
-    eye.pupil.rotation = atan2(delta.y, delta.x);
-    if (eye.pupil.position != mousePosition)
-        updatePupil(eye.pupil);
+    const float radius = eye.pupil.getRadius();
+    const sf::Vector2f initPosition = eye.position;
+    sf::Vector2f position = {mousePosition.x - radius, mousePosition.y - radius};
+    if (initPosition.x - position.x <= -15)
+        position.x = initPosition.x + 15;
+    else if (initPosition.x - position.x >= 20)
+        position.x = initPosition.x - 20;
+    if (initPosition.y - position.y <= -10)
+        position.y = initPosition.y + 10;
+    else if (initPosition.y - position.y >= 10)
+        position.y = initPosition.y - 10;
+    eye.pupil.setPosition(position);
 }
-
 // Рисует и выводит один кадр
 void redrawFrame(sf::RenderWindow &window, Eye &eyeL, Eye &eyeR)
 {
     window.clear();
     window.draw(eyeL.eyeball);
     window.draw(eyeR.eyeball);
-    window.draw(eyeL.pupil.head);
-    window.draw(eyeR.pupil.head);
+    window.draw(eyeL.pupil);
+    window.draw(eyeR.pupil);
     window.display();
 }

@@ -115,14 +115,13 @@ void update(const sf::Vector2f &mousePosition, sf::ConvexShape &shape, sf::Clock
             motion.x / vectorLength,
             motion.y / vectorLength};
         const float distance = movementSpeed * deltaTime;
+        shape.setPosition(currentPosition + direction * distance);
         float angle = toDegrees(atan2(motion.y, motion.x));
+        const float currentAngle = shape.getRotation();
         if (angle < 0)
         {
             angle = 360 + angle;
         }
-
-        shape.setPosition(currentPosition + direction * distance);
-        const float currentAngle = shape.getRotation();
         if (angle != currentAngle)
         {
             float deltaAngle = angle - currentAngle;

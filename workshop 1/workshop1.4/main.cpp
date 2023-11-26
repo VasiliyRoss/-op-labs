@@ -15,7 +15,7 @@ void initObject(Object &object, sf::Vector2f &position, std::string pathToTextur
 void pollEvents(sf::RenderWindow &window, sf::Vector2f &mouseClickPosition);
 void redrawFrame(sf::RenderWindow &window, Object &object1, Object &object2);
 void updateObjectPositionOnClick(Object &object, sf::Vector2f &position);
-void updateMovingObject(Object &object, sf::Vector2f &position, sf::Clock &clock);
+void updateMovingObject(Object &object, sf::Vector2f &targetPosition, sf::Clock &clock);
 sf::Vector2f toEuclidean(float radius, float angle);
 float toDegrees(float radians);
 
@@ -32,6 +32,7 @@ int main()
 
     sf::Vector2f startPosition = {400, 300};
     sf::Vector2f mouseClickPosition = startPosition;
+    sf::Clock clock;
 
     Object cat;
     Object lasertPointer;
@@ -43,6 +44,7 @@ int main()
     {
         pollEvents(window, mouseClickPosition);
         updateObjectPositionOnClick(lasertPointer, mouseClickPosition);
+        updateMovingObject(cat, mouseClickPosition, clock);
         redrawFrame(window, lasertPointer, cat);
     }
 }
@@ -94,4 +96,39 @@ void redrawFrame(sf::RenderWindow &window, Object &object1, Object &object2)
 void updateObjectPositionOnClick(Object &object, sf::Vector2f &position)
 {
     object.sprite.setPosition(position);
+}
+
+float toDegrees(float radians)
+{
+    return float(double(radians) * 180 / M_PI);
+}
+
+sf::Vector2f toEuclidean(float radius, float angle)
+{
+    return {
+        radius * std::cos(angle),
+        radius * std::sin(angle)};
+}
+
+void updateMovingObject(Object &object, sf::Vector2f &targetPosition, sf::Clock &clock)
+{
+    constexpr float movementSpeed = 200.f;
+    const float deltaTime = clock.restart().asSeconds();
+    const sf::Vector2f currentPosition = object.sprite.getPosition();
+
+    if (currentPosition != targetPosition)
+    {
+        const sf::Vector2f motion = targetPosition - currentPosition;
+        const float vectorLength = std::sqrt(motion.x * motion.x + motion.y * motion.y);
+        const sf::Vector2f direction = {
+            motion.x / vectorLength,
+            motion.y / vectorLength};
+        const float distance = movementSpeed * deltaTime;
+        object.sprite.setPosition(currentPosition + direction * distance);
+    }
+
+    if (currentPosition.x > targetPosition.x)
+        object.sprite.setScale(-1, 1);
+    else
+        object.sprite.setScale(1, 1);
 }

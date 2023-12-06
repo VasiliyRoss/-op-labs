@@ -111,7 +111,6 @@ void updateMovingObject(Circle *setOfCircles, sf::Clock &clock)
 
         position += speed * dt;
 
-        // Проверка столкновений с границами окна и отскок
         if ((position.x + 2 * BALL_SIZE >= WINDOW_WIDTH) && (speed.x > 0))
         {
             speed.x = -speed.x;
